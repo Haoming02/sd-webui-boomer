@@ -44,6 +44,23 @@
 
             row.parentNode.insertBefore(row2, row)
         })
+
+        // Extras
+        const dir_btn = document.getElementById('extras_open_folder')
+        dir_btn.innerHTML = 'Output Folder'
+        dir_btn.classList.remove('tool')
+
+        const send_ii_btn = document.getElementById('extras_send_to_img2img')
+        send_ii_btn.innerHTML = 'Send to img2img'
+        send_ii_btn.classList.remove('tool')
+
+        const send_in_btn = document.getElementById('extras_send_to_inpaint')
+        send_in_btn.innerHTML = 'Send to Inpaint'
+        send_in_btn.classList.remove('tool')
+
+        const send_ex_btn = document.getElementById('extras_send_to_extras')
+        send_ex_btn.innerHTML = 'Send to Extra'
+        send_ex_btn.classList.remove('tool')
     }
 }
 
