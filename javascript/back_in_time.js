@@ -6,7 +6,10 @@
         this.Modes.forEach((mode) => {
 
             const row = document.getElementById('image_buttons_' + mode + '2img')
-            const row2 = row.cloneNode()
+            const form = row.querySelector('.form')
+
+            const new_row = row.cloneNode()
+            const new_form = form.cloneNode()
 
             // Move Apply Style to Main Page
             const apply_style_btn = document.getElementById(mode + '2img_style_apply')
@@ -15,7 +18,7 @@
 
             // Replace Icon with Text
             const dir_btn = document.getElementById(mode + '2img_open_folder')
-            dir_btn.innerHTML = 'Output Folder'
+            dir_btn.innerHTML = 'Open Output Folder'
             dir_btn.classList.remove('tool')
 
             const save_btn = document.getElementById('save_' + mode + '2img')
@@ -38,16 +41,18 @@
             send_ex_btn.innerHTML = 'Send to Extra'
             send_ex_btn.classList.remove('tool')
 
-            row2.appendChild(send_ii_btn)
-            row2.appendChild(send_in_btn)
-            row2.appendChild(send_ex_btn)
+            new_form.appendChild(send_ii_btn)
+            new_form.appendChild(send_in_btn)
+            new_form.appendChild(send_ex_btn)
 
-            row.parentNode.insertBefore(row2, row)
+            new_row.appendChild(new_form)
+
+            row.parentNode.insertBefore(new_row, row)
         })
 
         // Extras
         const dir_btn = document.getElementById('extras_open_folder')
-        dir_btn.innerHTML = 'Output Folder'
+        dir_btn.innerHTML = 'Open Output Folder'
         dir_btn.classList.remove('tool')
 
         const send_ii_btn = document.getElementById('extras_send_to_img2img')

@@ -1,0 +1,33 @@
+.extra-network-cards .card .actions .name {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    font-size: 12px;
+    padding: 0px 2px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.extra-network-cards .card .button-row .metadata-button {
+    position: absolute;
+    height: 24px;
+    width: 24px;
+    top: -0.5em;
+    left: -85px;
+}
+
+.extra-network-cards .card .button-row .edit-button {
+    position: absolute;
+    height: 24px;
+    width: 24px;
+    top: -0.5em;
+    right: 10px;
+}
+
+.extra-network-cards .card {
+    height: 6em;
+    width: 6em;
+    background-size: cover;
+    background-position: center center;
+}
