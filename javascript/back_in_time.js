@@ -11,10 +11,26 @@
             const new_row = row.cloneNode()
             const new_form = form.cloneNode()
 
-            // Move Apply Style to Main Page
-            const apply_style_btn = document.getElementById(mode + '2img_style_apply')
+            // Copy Apply Style to Main Page
             const tools = document.getElementById(mode + '2img_tools').querySelector('.form')
-            tools.append(apply_style_btn)
+            const styles_row = document.getElementById(mode + '2img_styles_row').querySelector('.form')
+            const styles_diag = document.getElementById(mode + '2img_styles_edit_button')
+
+            const refresh_style_btn = document.getElementById('refresh_' + mode + '2img_styles')
+            const new_btn1 = refresh_style_btn.cloneNode(true)
+            styles_row.insertBefore(new_btn1, styles_diag)
+
+            const apply_style_btn = document.getElementById(mode + '2img_style_apply')
+            const new_btn2 = apply_style_btn.cloneNode(true)
+            tools.append(new_btn2)
+
+            new_btn1.addEventListener('click', () => {
+                refresh_style_btn.dispatchEvent(new Event('click'))
+            })
+
+            new_btn2.addEventListener('click', () => {
+                apply_style_btn.dispatchEvent(new Event('click'))
+            })
 
             // Replace Icon with Text
             const dir_btn = document.getElementById(mode + '2img_open_folder')
