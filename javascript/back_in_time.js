@@ -11,7 +11,7 @@
             const new_row = row.cloneNode()
             const new_form = form.cloneNode()
 
-            // Copy Apply Style to Main Page
+            // Copy Refresh & Apply Style to Main Page
             const tools = document.getElementById(mode + '2img_tools').querySelector('.form')
             const styles_row = document.getElementById(mode + '2img_styles_row').querySelector('.form')
             const styles_diag = document.getElementById(mode + '2img_styles_edit_button')
@@ -30,6 +30,44 @@
 
             new_btn2.addEventListener('click', () => {
                 apply_style_btn.dispatchEvent(new Event('click'))
+            })
+
+            // Add Save Style
+            const new_btn3 = refresh_style_btn.cloneNode()
+            new_btn3.innerHTML = '💾'
+            new_btn3.title = "Save style"
+            tools.append(new_btn3)
+
+            const styles_dropdown = document.getElementById(mode + '2img_styles_edit_select')
+            const input = styles_dropdown.querySelector('input')
+
+            const pos_prompt = gradioApp().getElementById(mode + '2img_prompt').querySelector('textarea')
+            const neg_prompt = gradioApp().getElementById(mode + '2img_neg_prompt').querySelector('textarea')
+
+            const pos_field = gradioApp().getElementById(mode + '2img_edit_style_prompt').querySelector('textarea')
+            const neg_field = gradioApp().getElementById(mode + '2img_edit_style_neg_prompt').querySelector('textarea')
+
+            const save_style_btn = document.getElementById(mode + '2img_edit_style_save')
+
+            new_btn3.addEventListener('click', () => {
+
+                var name = prompt('(Experimental) Name for the New Style: ', 'New Style')
+                input.value = name
+                pos_field.value = pos_prompt.value
+                neg_field.value = neg_prompt.value
+
+                updateInput(input)
+                updateInput(pos_field)
+                updateInput(neg_field)
+
+                input.dispatchEvent(new KeyboardEvent('keyup', { 'keyCode': 32, 'which': 32 }))
+
+                save_style_btn.dispatchEvent(new Event('click'))
+
+                input.value = ''
+                pos_field.value = ''
+                neg_field.value = ''
+
             })
 
             // Replace Icon with Text
