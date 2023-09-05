@@ -6,4 +6,6 @@ This is an Extension for the [Automatic1111 Webui](https://github.com/AUTOMATIC1
 2. Add a `Save Style` button back under **Generate** *(Experimental)*
 3. Change the icons of the buttons under Generation Result back to texts
 4. Restore the old "`thumbs`" look of **Extra Networks**
-    - You can delete the `style.css` file inside this Extension folder if you don't want this
+5. Revert image thumbnails scaling from `fill` to `fit`
+
+> `4.` and `5.` are controlled by the `style.css` file inside the folder of this Extension

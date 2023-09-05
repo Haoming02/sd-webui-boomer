@@ -31,3 +31,7 @@
     background-size: cover;
     background-position: center center;
 }
+
+.block.gradio-gallery img {
+    object-fit: contain !important;
+}
