@@ -18,10 +18,12 @@
 
             const refresh_style_btn = document.getElementById('refresh_' + mode + '2img_styles')
             const new_btn1 = refresh_style_btn.cloneNode(true)
+            new_btn1.id = 'boomer-refresh-' + mode
             styles_row.insertBefore(new_btn1, styles_diag)
 
             const apply_style_btn = document.getElementById(mode + '2img_style_apply')
             const new_btn2 = apply_style_btn.cloneNode(true)
+            new_btn2.id = 'boomer-apply-' + mode
             tools.append(new_btn2)
 
             new_btn1.addEventListener('click', () => {
@@ -36,6 +38,7 @@
             const new_btn3 = refresh_style_btn.cloneNode()
             new_btn3.innerHTML = '💾'
             new_btn3.title = "Save style"
+            new_btn3.id = 'boomer-save-' + mode
             tools.append(new_btn3)
 
             const styles_dropdown = document.getElementById(mode + '2img_styles_edit_select')
