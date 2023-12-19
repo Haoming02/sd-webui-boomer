@@ -9,9 +9,11 @@ STYLE = scripts.basedir() + '/style.css'
 section = ('boomer', 'Boomer')
 
 def add_ui_settings():
-    shared.opts.add_option("bmr_app_style", shared.OptionInfo(True, 'Duplicate both "Refresh Style" and "Apply Style" buttons back under Generate', section=section))
+    shared.opts.add_option("bmr_app_style", shared.OptionInfo(False, 'Duplicate "Apply Style" button back under Generate', section=section))
+    shared.opts.add_option("bmr_rfr_style", shared.OptionInfo(True, 'Duplicate "Refresh Style" button back under Generate', section=section))
     shared.opts.add_option("bmr_sav_style", shared.OptionInfo(True, 'Add a "Save Style" button back under Generate', section=section))
     shared.opts.add_option("bmr_send_btn", shared.OptionInfo(True, 'Change the icons of the buttons under Generation Result back to texts', section=section))
+
     shared.opts.add_option("bmr_fit", shared.OptionInfo(True, "Revert image thumbnails scaling from Fill to Fit", section=section))
     shared.opts.add_option("bmr_thumbs", shared.OptionInfo(True, 'Restore the old "thumbs" look of Extra Networks', section=section))
     shared.opts.add_option("bmr_enlarge", shared.OptionInfo(False, "Enlarege the Extra Networks card when hovered", section=section))
@@ -19,15 +21,15 @@ def add_ui_settings():
 def load_ui_settings():
     styles = ['\n']
 
-    if not (hasattr(shared.opts, 'bmr_fit') and shared.opts.bmr_fit is False):
+    if getattr(shared.opts, 'bmr_fit', True):
         with open(STYLE_FIT, 'r') as FILE:
             styles += FILE.readlines()
 
-    if not (hasattr(shared.opts, 'bmr_thumbs') and shared.opts.bmr_thumbs is False):
+    if getattr(shared.opts, 'bmr_thumbs', True):
         with open(STYLE_THUMBS, 'r') as FILE:
             styles += FILE.readlines()
 
-    if hasattr(shared.opts, 'bmr_enlarge') and shared.opts.bmr_enlarge is True:
+    if getattr(shared.opts, 'bmr_enlarge', False):
         with open(STYLE_ENLARGE, 'r') as FILE:
             styles += FILE.readlines()
 
