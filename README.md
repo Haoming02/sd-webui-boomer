@@ -1,13 +1,16 @@
 ﻿# SD Webui Boomer
 This is an Extension for the [Automatic1111 Webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui), which reverts some UI changes that came with `Webui v1.6.0`.
 
-## "Features"
-1. Duplicate both `Refresh Style` and `Apply Style` buttons back under **Generate**
-2. Add a `Save Style` button back under **Generate**
-3. Change the icons of the buttons under Generation Result back to texts
-4. Revert image thumbnails scaling from `fill` to `fit`
-5. Restore the old "`thumbs`" look of **Extra Networks**
-6. **(Optional)** Enlarge the Extra Networks card when hovered
+> Now supports [Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) as well!
+
+## Features
+1. Duplicate `Refresh Style` button back under **Generate**
+2. Duplicate `Apply Style` button back under **Generate** *(reverted in `v1.7.0`)*
+3. Add a `Save Style` button back under **Generate**
+4. Change the icons of the buttons under Generation Result back to texts
+5. Revert image thumbnails scaling from `fill` to `fit`
+6. Restore the old "`thumbs`" look of **Extra Networks**
+7. Enlarge the Extra Networks cards slightly when hovered
 
 ## Settings
 - You can enable/disable the above features in the `Boomer` section in the **Settings** page
