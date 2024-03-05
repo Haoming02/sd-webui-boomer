@@ -281,17 +281,17 @@ onUiLoaded(async () => {
         setTimeout(() => {
             TimeMachine.tree2folders();
         }, 1500);
-    }
 
-    ['txt', 'img'].forEach((mode) => {
-        ['textual_inversion', 'hypernetworks', 'checkpoints', 'lora'].forEach((network) => {
-            const btn = document.getElementById(`${mode}2img_${network}_extra_refresh`);
-            btn.addEventListener("click", () => {
-                setTimeout(() => {
-                    TimeMachine.tree2folders();
-                }, 500);
+        ['txt', 'img'].forEach((mode) => {
+            ['textual_inversion', 'hypernetworks', 'checkpoints', 'lora'].forEach((network) => {
+                const btn = document.getElementById(`${mode}2img_${network}_extra_refresh`);
+                btn.addEventListener("click", () => {
+                    setTimeout(() => {
+                        TimeMachine.tree2folders();
+                    }, 500);
+                });
             });
         });
-    });
+    }
 
 });
