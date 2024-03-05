@@ -26,6 +26,11 @@
         return config.checked;
     }
 
+    static restoreExtras_RemoveBaseFolder() {
+        const config = gradioApp().getElementById('setting_bmr_res_extras_rmb').querySelector('input[type=checkbox]');
+        return config.checked;
+    }
+
     // ===== Logics =====
     static main() {
         ['txt', 'img'].forEach((mode) => {
@@ -206,11 +211,14 @@
     static tree2folders() {
         try {
             ['txt', 'img'].forEach((mode) => {
-                ['textual_inversion', 'lora'].forEach((network) => {
+                ['textual_inversion', 'hypernetworks', 'checkpoints', 'lora'].forEach((network) => {
 
                     const tree = document.getElementById(`${mode}2img_${network}_tree`);
                     if (tree == null)
                         return;
+
+                    const tree_btn = document.getElementById(`${mode}2img_${network}_extra_tree_view`);
+                    tree_btn.style.display = 'none';
 
                     const filter = document.getElementById(`${mode}2img_${network}_extra_search`);
                     const cards = document.getElementById(`${mode}2img_${network}_cards`);
@@ -225,13 +233,15 @@
 
                     const allFolders = tree.querySelectorAll('.tree-list-item--has-subitem');
 
-                    if (allFolders.length === 0) {
-                        row.remove();
-                        return;
-                    }
+                    var dir = null;
+                    if (this.restoreExtras_RemoveBaseFolder())
+                        dir = tree.querySelector('.tree-list-content-dir')?.getAttribute('data-path');
 
                     allFolders.forEach((folder) => {
-                        const click = folder.querySelector('div').getAttribute('data-path');
+                        const click = folder.querySelector('div').getAttribute('data-path').replace(dir, '');
+
+                        if (click.trim().length == 0)
+                            return;
 
                         const btn = document.createElement('button');
                         btn.classList.add("boomer-btn");
@@ -251,8 +261,8 @@
                         row.appendChild(btn);
                     });
 
-                    const tree_btn = document.getElementById(`${mode}2img_${network}_extra_tree_view`);
-                    tree_btn.style.display = 'none';
+                    if (row.childElementCount === 0)
+                        row.remove();
 
                 });
             });
@@ -274,7 +284,7 @@ onUiLoaded(async () => {
     }
 
     ['txt', 'img'].forEach((mode) => {
-        ['textual_inversion', 'lora'].forEach((network) => {
+        ['textual_inversion', 'hypernetworks', 'checkpoints', 'lora'].forEach((network) => {
             const btn = document.getElementById(`${mode}2img_${network}_extra_refresh`);
             btn.addEventListener("click", () => {
                 setTimeout(() => {

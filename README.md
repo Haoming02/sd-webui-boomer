@@ -16,5 +16,4 @@ This is an Extension for the [Automatic1111 Webui](https://github.com/AUTOMATIC1
 6. Restore the old "`thumbs`" look of **Extra Networks**
 7. Enlarge the Extra Networks cards slightly when hovered
 8. (New for `v1.8.0`) Revert the **Extra Networks** tabs from the new Tree View back to the old Folder Buttons
-    - Only for `Textual Inversion` and `Lora` tabs
-    - Experimental
+    - Also comes with an option to remove the base folder name from the buttons *(**eg.** "Lora")*

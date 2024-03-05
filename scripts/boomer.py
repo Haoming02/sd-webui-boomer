@@ -21,6 +21,7 @@ def add_ui_settings():
     shared.opts.add_option("bmr_enlarge", shared.OptionInfo(False, "Enlarege the Extra Networks card when hovered", section=section))
 
     shared.opts.add_option("bmr_res_extras", shared.OptionInfo(False, "Revert the Extra Networks from the Tree View to the Folder Buttons", section=section))
+    shared.opts.add_option("bmr_res_extras_rmb", shared.OptionInfo(False, "|-- Remove the base folder name (eg. Lora) from the folder buttons above", section=section))
 
 def load_ui_settings():
     styles = ['\n']
