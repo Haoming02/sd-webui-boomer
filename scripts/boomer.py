@@ -1,11 +1,13 @@
 from modules import script_callbacks, shared
 import modules.scripts as scripts
+import os
 
-STYLE_FIT = scripts.basedir() + '/assets/fit.css'
-STYLE_THUMBS = scripts.basedir() + '/assets/thumbs.css'
-STYLE_ENLARGE = scripts.basedir() + '/assets/enlarge.css'
+STYLE_FIT = os.path.join(scripts.basedir(), 'assets', 'fit.css')
+STYLE_THUMBS = os.path.join(scripts.basedir(), 'assets', 'thumbs.css')
+STYLE_ENLARGE = os.path.join(scripts.basedir(), 'assets', 'enlarge.css')
+STYLE_FOLDER = os.path.join(scripts.basedir(), 'assets', 'folders.css')
 
-STYLE = scripts.basedir() + '/style.css'
+STYLE = os.path.join(scripts.basedir(), 'style.css')
 section = ('boomer', 'Boomer')
 
 def add_ui_settings():
@@ -17,6 +19,8 @@ def add_ui_settings():
     shared.opts.add_option("bmr_fit", shared.OptionInfo(True, "Revert image thumbnails scaling from Fill to Fit", section=section))
     shared.opts.add_option("bmr_thumbs", shared.OptionInfo(True, 'Restore the old "thumbs" look of Extra Networks', section=section))
     shared.opts.add_option("bmr_enlarge", shared.OptionInfo(False, "Enlarege the Extra Networks card when hovered", section=section))
+
+    shared.opts.add_option("bmr_res_extras", shared.OptionInfo(False, "Revert the Extra Networks from the Tree View to the Folder Buttons", section=section))
 
 def load_ui_settings():
     styles = ['\n']
@@ -31,6 +35,10 @@ def load_ui_settings():
 
     if getattr(shared.opts, 'bmr_enlarge', False):
         with open(STYLE_ENLARGE, 'r') as FILE:
+            styles += FILE.readlines()
+
+    if getattr(shared.opts, 'bmr_res_extras', False):
+        with open(STYLE_FOLDER, 'r') as FILE:
             styles += FILE.readlines()
 
     with open(STYLE, 'w+') as FILE:

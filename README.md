@@ -1,7 +1,11 @@
 ﻿# SD Webui Boomer
-This is an Extension for the [Automatic1111 Webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui), which reverts some UI changes that came with `Webui v1.6.0`.
+This is an Extension for the [Automatic1111 Webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui), which reverts some UI changes.
 
-> Now supports [Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) as well!
+> Also supports [Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge)!
+
+## Settings
+- You can enable/disable the features below in the `Boomer` section in the **Settings** page
+- All settings require `Reload UI` to apply
 
 ## Features
 1. Duplicate `Refresh Style` button back under **Generate**
@@ -11,7 +15,6 @@ This is an Extension for the [Automatic1111 Webui](https://github.com/AUTOMATIC1
 5. Revert image thumbnails scaling from `fill` to `fit`
 6. Restore the old "`thumbs`" look of **Extra Networks**
 7. Enlarge the Extra Networks cards slightly when hovered
-
-## Settings
-- You can enable/disable the above features in the `Boomer` section in the **Settings** page
-- All settings require `Reload UI` to apply
+8. (New for `v1.8.0`) Revert the **Extra Networks** tabs from the new Tree View back to the old Folder Buttons
+    - Only for `Textual Inversion` and `Lora` tabs
+    - Experimental
