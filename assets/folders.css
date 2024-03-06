@@ -3,7 +3,7 @@
     flex-direction: row;
     background-color: var(--background-fill-secondary);
     padding: 0.5em 2em;
-    height: 4em;
+    height: auto;
     border-radius: 0.5em;
     gap: 1em;
     margin: 0.5em 1em;

@@ -129,32 +129,43 @@
                     new_row.id = `image_buttons_${mode}2img_clone`;
 
                     const dir_btn = document.getElementById(`${mode}2img_open_folder`);
-                    dir_btn.textContent = 'Open Output Folder';
-                    dir_btn.classList.remove('tool');
+                    if (dir_btn != null) {
+                        dir_btn.textContent = 'Open Output Folder';
+                        dir_btn.classList.remove('tool');
+                    }
 
                     const save_btn = document.getElementById(`save_${mode}2img`);
-                    save_btn.textContent = 'Save Image';
-                    save_btn.classList.remove('tool');
+                    if (save_btn != null) {
+                        save_btn.textContent = 'Save Image';
+                        save_btn.classList.remove('tool');
+                    }
 
                     const zip_btn = document.getElementById(`save_zip_${mode}2img`);
-                    zip_btn.textContent = 'Save as Zip';
-                    zip_btn.classList.remove('tool');
+                    if (zip_btn != null) {
+                        zip_btn.textContent = 'Save as Zip';
+                        zip_btn.classList.remove('tool');
+                    }
 
                     const send_ii_btn = document.getElementById(`${mode}2img_send_to_img2img`);
-                    send_ii_btn.textContent = 'Send to img2img';
-                    send_ii_btn.classList.remove('tool');
+                    if (send_ii_btn != null) {
+                        send_ii_btn.textContent = 'Send to img2img';
+                        send_ii_btn.classList.remove('tool');
+                        new_form.appendChild(send_ii_btn);
+                    }
 
                     const send_in_btn = document.getElementById(`${mode}2img_send_to_inpaint`);
-                    send_in_btn.textContent = 'Send to Inpaint';
-                    send_in_btn.classList.remove('tool');
+                    if (send_in_btn != null) {
+                        send_in_btn.textContent = 'Send to Inpaint';
+                        send_in_btn.classList.remove('tool');
+                        new_form.appendChild(send_in_btn);
+                    }
 
                     const send_ex_btn = document.getElementById(`${mode}2img_send_to_extras`);
-                    send_ex_btn.textContent = 'Send to Extra';
-                    send_ex_btn.classList.remove('tool');
-
-                    new_form.appendChild(send_ii_btn);
-                    new_form.appendChild(send_in_btn);
-                    new_form.appendChild(send_ex_btn);
+                    if (send_ex_btn != null) {
+                        send_ex_btn.textContent = 'Send to Extra';
+                        send_ex_btn.classList.remove('tool');
+                        new_form.appendChild(send_ex_btn);
+                    }
 
                     const send_svd_btn = document.getElementById(`${mode}2img_send_to_svd`);
                     if (send_svd_btn != null) {
@@ -172,7 +183,7 @@
                     new_row.appendChild(new_form);
                     row.parentNode.insertBefore(new_row, row);
                 } catch (e) {
-                    alert(`Something went wrong while trying to: "Restore Buttons"\n${e}`);
+                    alert(`Something went wrong while trying to: "Restore Buttons (${mode})"\n${e}`);
                 }
             }
         });
@@ -181,20 +192,28 @@
         if (this.restoreButtons()) {
             try {
                 const dir_btn = document.getElementById('extras_open_folder');
-                dir_btn.textContent = 'Open Output Folder';
-                dir_btn.classList.remove('tool');
+                if (dir_btn != null) {
+                    dir_btn.textContent = 'Open Output Folder';
+                    dir_btn.classList.remove('tool');
+                }
 
                 const send_ii_btn = document.getElementById('extras_send_to_img2img');
-                send_ii_btn.textContent = 'Send to img2img';
-                send_ii_btn.classList.remove('tool');
+                if (send_ii_btn != null) {
+                    send_ii_btn.textContent = 'Send to img2img';
+                    send_ii_btn.classList.remove('tool');
+                }
 
                 const send_in_btn = document.getElementById('extras_send_to_inpaint');
-                send_in_btn.textContent = 'Send to Inpaint';
-                send_in_btn.classList.remove('tool');
+                if (send_in_btn != null) {
+                    send_in_btn.textContent = 'Send to Inpaint';
+                    send_in_btn.classList.remove('tool');
+                }
 
                 const send_ex_btn = document.getElementById('extras_send_to_extras');
-                send_ex_btn.textContent = 'Send to Extra';
-                send_ex_btn.classList.remove('tool');
+                if (send_ex_btn != null) {
+                    send_ex_btn.textContent = 'Send to Extra';
+                    send_ex_btn.classList.remove('tool');
+                }
 
                 const send_svd_btn = document.getElementById('extras_send_to_svd');
                 if (send_svd_btn != null) {
@@ -202,7 +221,7 @@
                     send_svd_btn.classList.remove('tool');
                 }
             } catch (e) {
-                alert(`Something went wrong while trying to: "Restore Buttons"\n${e}`);
+                alert(`Something went wrong while trying to: "Restore Buttons (Extras)"\n${e}`);
             }
         }
     }
