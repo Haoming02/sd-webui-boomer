@@ -11,15 +11,15 @@
     flex-wrap: wrap;
 }
 
-    .boomer-row .boomer-btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: var(--button-secondary-background-fill);
-        color: var(--button-secondary-text-color);
-        border-radius: var(--button-large-radius);
-        padding: var(--button-large-padding);
-        font-weight: var(--button-large-text-weight);
-        font-size: var(--button-large-text-size);
-        margin: 0px !important;
-    }
+.boomer-row .boomer-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--button-secondary-background-fill);
+    color: var(--button-secondary-text-color);
+    border-radius: var(--button-large-radius);
+    padding: var(--button-large-padding);
+    font-weight: var(--button-large-text-weight);
+    font-size: var(--button-large-text-size);
+    margin: 0px !important;
+}
