@@ -1,17 +1,17 @@
 ﻿class TimeMachine {
 
     // ===== Settings =====
-    static duplicateRefreshStyle() {
+    static #duplicateRefreshStyle() {
         const config = gradioApp().getElementById('setting_bmr_rfr_style').querySelector('input[type=checkbox]');
         return config.checked;
     }
 
-    static duplicateSaveStyle() {
+    static #duplicateSaveStyle() {
         const config = gradioApp().getElementById('setting_bmr_sav_style').querySelector('input[type=checkbox]');
         return config.checked;
     }
 
-    static restoreButtons() {
+    static #restoreButtons() {
         const config = gradioApp().getElementById('setting_bmr_send_btn').querySelector('input[type=checkbox]');
         return config.checked;
     }
@@ -19,172 +19,182 @@
     // ===== Logics =====
     static main() {
         ['txt', 'img'].forEach((mode) => {
-            const tools = document.getElementById(`${mode}2img_tools`).querySelector('.form');
 
             // Copy Refresh Style to Main Page
-            if (this.duplicateRefreshStyle()) {
+            if (this.#duplicateRefreshStyle()) {
                 try {
-                    const styles_row = document.getElementById(`${mode}2img_styles_row`).querySelector('.form');
-                    const styles_diag = document.getElementById(`${mode}2img_styles_edit_button`);
+                    const styles_diag = gradioApp().getElementById(`${mode}2img_styles_edit_button`);
+                    const styles_row = styles_diag.parentNode;
 
-                    const refresh_style_btn = document.getElementById(`refresh_${mode}2img_styles`);
-                    const new_btn = refresh_style_btn.cloneNode(true);
-                    new_btn.id = `boomer-refresh-${mode}`;
+                    const refresh_style_btn = gradioApp().getElementById(`refresh_${mode}2img_styles`);
+                    const new_btn = refresh_style_btn.cloneNode(false);
+                    new_btn.onclick = () => { refresh_style_btn.click(); }
+                    new_btn.textContent = refresh_style_btn.textContent;
+                    new_btn.id = `boomer-${new_btn.id}`;
+
                     styles_row.insertBefore(new_btn, styles_diag);
-
-                    new_btn.addEventListener('click', () => {
-                        refresh_style_btn.dispatchEvent(new Event('click'));
-                    });
                 } catch (e) {
                     alert(`Something went wrong while trying to: "Duplicate Refresh Style"\n${e}`);
+                    this.#duplicateRefreshStyle() = () => { return false; };
                 }
             }
 
             // Add Save Style
-            if (this.duplicateSaveStyle()) {
+            if (this.#duplicateSaveStyle()) {
                 try {
-                    const new_btn = document.getElementById(`${mode}2img_clear_prompt`).cloneNode();
-                    new_btn.textContent = '💾';
-                    new_btn.title = "Save style";
-                    new_btn.id = `boomer-save-${mode}`;
-                    tools.append(new_btn);
+                    const apply_btn = gradioApp().getElementById(`${mode}2img_style_apply`);
+                    const tools = apply_btn.parentNode;
 
-                    const styles_dropdown = document.getElementById(`${mode}2img_styles_edit_select`);
-                    const input = styles_dropdown.querySelector('input');
+                    const new_btn = apply_btn.cloneNode(false);
+                    new_btn.textContent = '💾';
+                    new_btn.title = "Save current prompts as style";
+                    new_btn.id = `boomer-${mode}2img_style_save`;
+                    tools.appendChild(new_btn);
+
+                    const name_field = gradioApp().getElementById(`${mode}2img_styles_edit_select`).querySelector('input');
+                    const pos_field = gradioApp().getElementById(`${mode}2img_edit_style_prompt`).querySelector('textarea');
+                    const neg_field = gradioApp().getElementById(`${mode}2img_edit_style_neg_prompt`).querySelector('textarea');
 
                     const pos_prompt = gradioApp().getElementById(`${mode}2img_prompt`).querySelector('textarea');
                     const neg_prompt = gradioApp().getElementById(`${mode}2img_neg_prompt`).querySelector('textarea');
 
-                    const pos_field = gradioApp().getElementById(`${mode}2img_edit_style_prompt`).querySelector('textarea');
-                    const neg_field = gradioApp().getElementById(`${mode}2img_edit_style_neg_prompt`).querySelector('textarea');
+                    const save_style_btn = gradioApp().getElementById(`${mode}2img_edit_style_save`);
 
-                    const save_style_btn = document.getElementById(`${mode}2img_edit_style_save`);
-
-                    new_btn.addEventListener('click', () => {
+                    new_btn.onclick = () => {
                         try {
-                            var name = prompt('Name for the New Style: ', 'New Style');
-                            input.value = name;
+                            const new_name = prompt('Name for the New Style: ', 'New Style');
+                            if (new_name == null)
+                                return;
+
+                            name_field.value = new_name.trim();
                             pos_field.value = pos_prompt.value;
                             neg_field.value = neg_prompt.value;
 
-                            updateInput(input);
+                            updateInput(name_field);
                             updateInput(pos_field);
                             updateInput(neg_field);
 
-                            input.dispatchEvent(new KeyboardEvent('keyup', { 'keyCode': 32, 'which': 32 }));
-
-                            save_style_btn.dispatchEvent(new Event('click'));
-
-                            input.value = '';
-                            pos_field.value = '';
-                            neg_field.value = '';
+                            name_field.dispatchEvent(new KeyboardEvent('keyup', { 'keyCode': 32, 'which': 32 }));
+                            save_style_btn.click();
                         } catch (e) {
                             alert(`Something went wrong while trying to save new style...\n${e}`);
                         }
-                    });
+                    }
                 } catch (e) {
                     alert(`Something went wrong while trying to: "Duplicate Save Style"\n${e}`);
+                    this.#duplicateSaveStyle() = () => { return false; };
                 }
             }
 
             // Replace Icon with Text
-            if (this.restoreButtons()) {
+            if (this.#restoreButtons()) {
                 try {
-                    const row = document.getElementById(`image_buttons_${mode}2img`);
-                    const form = row.querySelector('.form');
 
-                    const new_row = row.cloneNode();
-                    const new_form = form.cloneNode();
-                    new_row.id = `image_buttons_${mode}2img_clone`;
+                    const row = gradioApp().getElementById(`image_buttons_${mode}2img`);
+                    const is_gradio4 = (row.querySelector('.form') == null);
+                    var new_form = undefined;
 
-                    const dir_btn = document.getElementById(`${mode}2img_open_folder`);
+                    if (is_gradio4) {
+                        new_form = row.cloneNode(false);
+                        new_form.id = `boomer-${row.id}`;
+
+                        row.parentNode.insertBefore(new_form, row);
+                    } else {
+                        const new_row = row.cloneNode(false);
+                        new_row.id = `boomer-${row.id}`;
+
+                        new_form = row.querySelector('.form').cloneNode(false);
+                        new_row.appendChild(new_form);
+                        row.parentNode.insertBefore(new_row, row);
+                    }
+
+                    const dir_btn = gradioApp().getElementById(`${mode}2img_open_folder`);
                     if (dir_btn != null) {
                         dir_btn.textContent = 'Open Output Folder';
                         dir_btn.classList.remove('tool');
                     }
 
-                    const save_btn = document.getElementById(`save_${mode}2img`);
+                    const save_btn = gradioApp().getElementById(`save_${mode}2img`);
                     if (save_btn != null) {
                         save_btn.textContent = 'Save Image';
                         save_btn.classList.remove('tool');
                     }
 
-                    const zip_btn = document.getElementById(`save_zip_${mode}2img`);
+                    const zip_btn = gradioApp().getElementById(`save_zip_${mode}2img`);
                     if (zip_btn != null) {
                         zip_btn.textContent = 'Save as Zip';
                         zip_btn.classList.remove('tool');
                     }
 
-                    const send_ii_btn = document.getElementById(`${mode}2img_send_to_img2img`);
+                    const send_ii_btn = gradioApp().getElementById(`${mode}2img_send_to_img2img`);
                     if (send_ii_btn != null) {
                         send_ii_btn.textContent = 'Send to img2img';
                         send_ii_btn.classList.remove('tool');
                         new_form.appendChild(send_ii_btn);
                     }
 
-                    const send_in_btn = document.getElementById(`${mode}2img_send_to_inpaint`);
+                    const send_in_btn = gradioApp().getElementById(`${mode}2img_send_to_inpaint`);
                     if (send_in_btn != null) {
                         send_in_btn.textContent = 'Send to Inpaint';
                         send_in_btn.classList.remove('tool');
                         new_form.appendChild(send_in_btn);
                     }
 
-                    const send_ex_btn = document.getElementById(`${mode}2img_send_to_extras`);
+                    const send_ex_btn = gradioApp().getElementById(`${mode}2img_send_to_extras`);
                     if (send_ex_btn != null) {
                         send_ex_btn.textContent = 'Send to Extra';
                         send_ex_btn.classList.remove('tool');
                         new_form.appendChild(send_ex_btn);
                     }
 
-                    const send_svd_btn = document.getElementById(`${mode}2img_send_to_svd`);
+                    const send_svd_btn = gradioApp().getElementById(`${mode}2img_send_to_svd`);
                     if (send_svd_btn != null) {
                         send_svd_btn.textContent = 'Send to SVD';
                         send_svd_btn.classList.remove('tool');
                         new_form.appendChild(send_svd_btn);
                     }
 
-                    const upscale_btn = document.getElementById(`${mode}2img_upscale`);
+                    const upscale_btn = gradioApp().getElementById(`${mode}2img_upscale`);
                     if (upscale_btn != null) {
                         upscale_btn.textContent = 'Upscale';
                         upscale_btn.classList.remove('tool');
                     }
 
-                    new_row.appendChild(new_form);
-                    row.parentNode.insertBefore(new_row, row);
                 } catch (e) {
-                    alert(`Something went wrong while trying to: "Restore Buttons (${mode})"\n${e}`);
+                    alert(`Something went wrong while trying to: "Restore Buttons"\n${e}`);
+                    this.#restoreButtons() = () => { return false; };
                 }
             }
         });
 
         // Extras Tab
-        if (this.restoreButtons()) {
+        if (this.#restoreButtons()) {
             try {
-                const dir_btn = document.getElementById('extras_open_folder');
+                const dir_btn = gradioApp().getElementById('extras_open_folder');
                 if (dir_btn != null) {
                     dir_btn.textContent = 'Open Output Folder';
                     dir_btn.classList.remove('tool');
                 }
 
-                const send_ii_btn = document.getElementById('extras_send_to_img2img');
+                const send_ii_btn = gradioApp().getElementById('extras_send_to_img2img');
                 if (send_ii_btn != null) {
                     send_ii_btn.textContent = 'Send to img2img';
                     send_ii_btn.classList.remove('tool');
                 }
 
-                const send_in_btn = document.getElementById('extras_send_to_inpaint');
+                const send_in_btn = gradioApp().getElementById('extras_send_to_inpaint');
                 if (send_in_btn != null) {
                     send_in_btn.textContent = 'Send to Inpaint';
                     send_in_btn.classList.remove('tool');
                 }
 
-                const send_ex_btn = document.getElementById('extras_send_to_extras');
+                const send_ex_btn = gradioApp().getElementById('extras_send_to_extras');
                 if (send_ex_btn != null) {
                     send_ex_btn.textContent = 'Send to Extra';
                     send_ex_btn.classList.remove('tool');
                 }
 
-                const send_svd_btn = document.getElementById('extras_send_to_svd');
+                const send_svd_btn = gradioApp().getElementById('extras_send_to_svd');
                 if (send_svd_btn != null) {
                     send_svd_btn.textContent = 'Send to SVD';
                     send_svd_btn.classList.remove('tool');
