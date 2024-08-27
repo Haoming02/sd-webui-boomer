@@ -1,14 +1,17 @@
 from modules.script_callbacks import on_ui_settings, on_before_ui
 from modules.shared import opts, OptionInfo
-import modules.scripts as scripts
+from modules.scripts import basedir
+from json import dump, load
 import os
 
-STYLE_FIT = os.path.join(scripts.basedir(), "assets", "fit.css")
-STYLE_THUMBS = os.path.join(scripts.basedir(), "assets", "thumbs.css")
-STYLE_ENLARGE = os.path.join(scripts.basedir(), "assets", "enlarge.css")
+STYLE_FIT = os.path.join(basedir(), "assets", "fit.css")
+STYLE_THUMBS = os.path.join(basedir(), "assets", "thumbs.css")
+STYLE_ENLARGE = os.path.join(basedir(), "assets", "enlarge.css")
 
-STYLE = os.path.join(scripts.basedir(), "style.css")
+STYLE = os.path.join(basedir(), "style.css")
 section = ("boomer", "Boomer")
+
+CACHE = os.path.join(basedir(), "cache.json")
 
 
 def add_ui_settings():
@@ -46,23 +49,45 @@ def add_ui_settings():
 
 
 def load_ui_settings():
+
+    options: list[bool] = [
+        getattr(opts, "bmr_fit", True),
+        getattr(opts, "bmr_thumbs", True),
+        getattr(opts, "bmr_enlarge", False),
+    ]
+
+    unchanged = False
+
+    if os.path.isfile(CACHE):
+        with open(CACHE, "r") as file:
+            cache: list[bool] = load(file)
+
+        if cache == options:
+            unchanged = True
+
+    if unchanged:
+        return
+
     styles = []
 
-    if getattr(opts, "bmr_fit", True):
+    if options[0]:
         with open(STYLE_FIT, "r") as FILE:
             styles += FILE.readlines()
 
-    if getattr(opts, "bmr_thumbs", True):
+    if options[1]:
         with open(STYLE_THUMBS, "r") as FILE:
             styles += FILE.readlines()
 
-    if getattr(opts, "bmr_enlarge", False):
+    if options[2]:
         with open(STYLE_ENLARGE, "r") as FILE:
             styles += FILE.readlines()
 
     if styles:
         with open(STYLE, "w+") as FILE:
             FILE.writelines(styles)
+
+    with open(CACHE, "w+") as file:
+        dump(options, file)
 
 
 on_ui_settings(add_ui_settings)
