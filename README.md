@@ -4,7 +4,7 @@ This is an Extension for the [Automatic1111 Webui](https://github.com/AUTOMATIC1
 > Also supports [Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge)!
 
 ## Settings
-- You can enable/disable the following features in the `Boomer` section of the **Settings** page
+- You can enable/disable the following features in the `Boomer` section under the <ins>User Interface</ins> category in the **Settings** page
     - All settings require `Reload UI` to apply
 
 ### Boomer Features

@@ -17,33 +17,49 @@ CACHE = os.path.join(basedir(), "cache.json")
 def add_ui_settings():
     opts.add_option(
         "bmr_rfr_style",
-        OptionInfo(True, 'Duplicate "Refresh Style" button', section=section),
+        OptionInfo(
+            True, 'Duplicate "Refresh Style" button', section=section, category_id="ui"
+        ),
     )
     opts.add_option(
         "bmr_sav_style",
-        OptionInfo(True, 'Add "Save Style" button', section=section),
+        OptionInfo(True, 'Add "Save Style" button', section=section, category_id="ui"),
     )
     opts.add_option(
         "bmr_send_btn",
-        OptionInfo(True, "Change the button icons back to texts", section=section),
+        OptionInfo(
+            True,
+            "Change the button icons back to texts",
+            section=section,
+            category_id="ui",
+        ),
     )
 
     opts.add_option(
         "bmr_fit",
         OptionInfo(
-            True, "Revert image thumbnails scaling from Fill to Fit", section=section
+            True,
+            "Revert image thumbnails scaling from Fill to Fit",
+            section=section,
+            category_id="ui",
         ),
     )
     opts.add_option(
         "bmr_thumbs",
         OptionInfo(
-            True, 'Restore the old "thumbs" look of Extra Networks', section=section
+            True,
+            'Restore the old "thumbs" look of Extra Networks',
+            section=section,
+            category_id="ui",
         ),
     )
     opts.add_option(
         "bmr_enlarge",
         OptionInfo(
-            False, "Enlarege the Extra Networks card when hovered", section=section
+            False,
+            "Enlarege the Extra Networks card when hovered",
+            section=section,
+            category_id="ui",
         ),
     )
 
