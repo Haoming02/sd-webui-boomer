@@ -1,0 +1,9 @@
+#lightboxModal a.modalPrev {
+    transform: scale(6.0);
+    left: 2em;
+}
+
+#lightboxModal a.modalNext {
+    transform: scale(6.0);
+    right: 2em;
+}

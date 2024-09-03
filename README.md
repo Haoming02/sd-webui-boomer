@@ -16,6 +16,7 @@ This is an Extension for the [Automatic1111 Webui](https://github.com/AUTOMATIC1
 
 ### Features for Boomer
 6. Enlarge the Extra Networks cards slightly when hovered
+7. Enlarge the Previous `<` and Next `>` buttons when viewing the result images in fullscreen
 
 <hr>
 

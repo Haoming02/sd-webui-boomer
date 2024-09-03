@@ -5,6 +5,7 @@ from json import dump, load
 import os
 
 STYLE_FIT = os.path.join(basedir(), "assets", "fit.css")
+STYLE_ARROW = os.path.join(basedir(), "assets", "arrow.css")
 STYLE_THUMBS = os.path.join(basedir(), "assets", "thumbs.css")
 STYLE_ENLARGE = os.path.join(basedir(), "assets", "enlarge.css")
 
@@ -62,6 +63,15 @@ def add_ui_settings():
             category_id="ui",
         ),
     )
+    opts.add_option(
+        "bmr_arrow",
+        OptionInfo(
+            False,
+            "Enlarege the Previous and Next arrow buttons in the fullscreen image viewer",
+            section=section,
+            category_id="ui",
+        ),
+    )
 
 
 def load_ui_settings():
@@ -70,16 +80,21 @@ def load_ui_settings():
         getattr(opts, "bmr_fit", True),
         getattr(opts, "bmr_thumbs", True),
         getattr(opts, "bmr_enlarge", False),
+        getattr(opts, "bmr_arrow", False),
     ]
 
     unchanged = False
 
-    if os.path.isfile(CACHE):
-        with open(CACHE, "r") as file:
-            cache: list[bool] = load(file)
+    try:
+        if os.path.isfile(CACHE):
+            with open(CACHE, "r") as file:
+                cache: list[bool] = load(file)
 
-        if cache == options:
-            unchanged = True
+            if cache == options:
+                unchanged = True
+
+    except:
+        unchanged = False
 
     if unchanged:
         return
@@ -96,6 +111,10 @@ def load_ui_settings():
 
     if options[2]:
         with open(STYLE_ENLARGE, "r") as FILE:
+            styles += FILE.readlines()
+
+    if options[3]:
+        with open(STYLE_ARROW, "r") as FILE:
             styles += FILE.readlines()
 
     if styles:
