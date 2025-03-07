@@ -1,3 +1,7 @@
+.extra-network-cards .card {
+    transition: transform 0.05s linear;
+}
+
 .extra-network-cards .card:hover {
     transform: scale(1.2);
 }
