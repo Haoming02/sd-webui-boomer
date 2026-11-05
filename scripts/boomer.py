@@ -1,97 +1,96 @@
-from modules.script_callbacks import on_ui_settings, on_before_ui
-from modules.shared import opts, OptionInfo
+import os
+from dataclasses import dataclass
+from typing import Optional
+
+from modules import errors
+from modules.script_callbacks import on_before_ui, on_ui_settings
 from modules.scripts import basedir
-import os.path
+from modules.shared import OptionInfo, opts
 
-STYLE_FIT = os.path.join(basedir(), "assets", "fit.css")
-STYLE_ARROW = os.path.join(basedir(), "assets", "arrow.css")
-STYLE_THUMBS = os.path.join(basedir(), "assets", "thumbs.css")
-STYLE_ENLARGE = os.path.join(basedir(), "assets", "enlarge.css")
+BASEDIR = basedir()
+ASSETDIR = os.path.join(BASEDIR, "assets")
+STYLE_CSS = os.path.join(BASEDIR, "style.css")
+LEGACY_CACHE = os.path.join(BASEDIR, "cache.json")
 
-STYLE = os.path.join(basedir(), "style.css")
-CACHE = os.path.join(basedir(), "cache.json")
+SECTION = {"section": ("boomer", "Boomer"), "category_id": "ui"}
+
+
+@dataclass(frozen=True)
+class Option:
+    key: str
+    label: str
+    default: bool
+    css: Optional[str] = None
+
+
+OPTIONS = (
+    Option("bmr_rfr_style", 'Duplicate "Refresh Style" button', True),
+    Option("bmr_sav_style", 'Add "Save Style" button', True),
+    Option("bmr_send_btn", "Change the button icons back to texts", True),
+    Option("bmr_fit", 'Revert gallery images from "Fill" to "Fit"', True, "fit.css"),
+    Option("bmr_thumbs", 'Restore the old "thumbs" look of ExtraNetwork cards', True, "thumbs.css"),
+    Option("bmr_enlarge", "Enlarge the ExtraNetwork cards when hovered", False, "enlarge.css"),
+    Option("bmr_arrow", "Enlarge the arrow buttons in fullscreen image view", False, "arrow.css"),
+)
 
 
 def add_ui_settings():
-    args = {"section": ("boomer", "Boomer"), "category_id": "ui"}
-
-    opts.add_option(
-        "bmr_rfr_style",
-        OptionInfo(True, 'Duplicate "Refresh Style" button', **args),
-    )
-    opts.add_option(
-        "bmr_sav_style",
-        OptionInfo(True, 'Add "Save Style" button', **args),
-    )
-    opts.add_option(
-        "bmr_send_btn",
-        OptionInfo(True, "Change the button icons back to texts", **args),
-    )
-
-    opts.add_option(
-        "bmr_fit",
-        OptionInfo(True, 'Revert gallery images from "Fill" to "Fit"', **args),
-    )
-    opts.add_option(
-        "bmr_thumbs",
-        OptionInfo(True, 'Restore the old "thumbs" look of ExtraNetwork cards', **args),
-    )
-    opts.add_option(
-        "bmr_enlarge",
-        OptionInfo(False, "Enlarge the ExtraNetwork cards when hovered", **args),
-    )
-    opts.add_option(
-        "bmr_arrow",
-        OptionInfo(False, "Enlarge the arrow buttons in fullscreen image view", **args),
-    )
+    for option in OPTIONS:
+        opts.add_option(option.key, OptionInfo(option.default, option.label, **SECTION))
 
 
-def load_ui_settings():
-    from json import dump, load
+def build_style_css() -> str:
+    fragments = []
 
-    version = 2.0
-    options: list[bool, int] = [
-        getattr(opts, "bmr_fit", True),
-        getattr(opts, "bmr_thumbs", True),
-        getattr(opts, "bmr_enlarge", False),
-        getattr(opts, "bmr_arrow", False),
-        version,
-    ]
+    for option in OPTIONS:
+        if option.css is None or not getattr(opts, option.key, option.default):
+            continue
 
+        path = os.path.join(ASSETDIR, option.css)
+
+        try:
+            with open(path, encoding="utf-8") as fragment:
+                css = fragment.read().strip()
+        except OSError:
+            errors.report(f"sd-webui-boomer: cannot read {path}", exc_info=True)
+            continue
+
+        if css:
+            fragments.append(css)
+
+    return "\n\n".join(fragments) + "\n" if fragments else ""
+
+
+def drop_legacy_cache():
     try:
-        with open(CACHE, "r") as file:
-            cache: list[bool] = load(file)
-
-        if cache == options:
-            return
-
-    except Exception:
+        os.remove(LEGACY_CACHE)
+    except FileNotFoundError:
         pass
 
-    with open(CACHE, "w+") as file:
-        dump(options, file)
 
-    styles: list[str] = []
+def update_style_css():
+    drop_legacy_cache()
 
-    if options[0]:
-        with open(STYLE_FIT, "r") as file:
-            styles.extend(file.readlines())
+    css = build_style_css()
 
-    if options[1]:
-        with open(STYLE_THUMBS, "r") as file:
-            styles.extend(file.readlines())
+    try:
+        with open(STYLE_CSS, encoding="utf-8") as current:
+            if current.read() == css:
+                return
+    except FileNotFoundError:
+        pass
+    except OSError:
+        errors.report(f"sd-webui-boomer: cannot read {STYLE_CSS}", exc_info=True)
 
-    if options[2]:
-        with open(STYLE_ENLARGE, "r") as file:
-            styles.extend(file.readlines())
+    temporary = f"{STYLE_CSS}.tmp"
 
-    if options[3]:
-        with open(STYLE_ARROW, "r") as file:
-            styles.extend(file.readlines())
-
-    with open(STYLE, "w+") as file:
-        file.writelines(styles)
+    try:
+        with open(temporary, "w", encoding="utf-8") as file:
+            file.write(css)
+        os.replace(temporary, STYLE_CSS)
+    except OSError:
+        errors.report(f"sd-webui-boomer: cannot write {STYLE_CSS}", exc_info=True)
 
 
 on_ui_settings(add_ui_settings)
-on_before_ui(load_ui_settings)
+on_before_ui(update_style_css)
